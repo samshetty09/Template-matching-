@@ -1,0 +1,27 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Load the source and template images
+source_image = cv2.imread('D:/ODDSEM/OSTT/source_image.jpg', 
+cv2.IMREAD_COLOR)
+template_image = cv2.imread('D:/ODDSEM/OSTT/template_image.png', 
+cv2.IMREAD_COLOR)
+# Convert images to grayscale for template matching
+source_gray = cv2.cvtColor(source_image, cv2.COLOR_BGR2GRAY)
+template_gray = cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY)
+# Get the width and height of the template
+template_width, template_height = template_gray.shape[::-1]
+# Perform template matching
+result = cv2.matchTemplate(source_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+# Find the best match location
+min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+# Draw a rectangle around the matched region
+top_left = max_loc
+bottom_right = (top_left[0] + template_width, top_left[1] + template_height)
+cv2.rectangle(source_image, top_left, bottom_right, (0, 255, 0), 2)
+# Display the result
+plt.figure(figsize=(10, 5))
+plt.imshow(cv2.cvtColor(source_image, cv2.COLOR_BGR2RGB))
+plt.title("Template Match")
+plt.axis("off")
+plt.show()
